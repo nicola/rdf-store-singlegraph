@@ -1,6 +1,6 @@
 {
   "name": "rdf-store-singlegraph",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Single Graph RDF Store that follows the RDF Interface specification",
   "main": "index.js",
   "scripts": {
