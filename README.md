@@ -10,8 +10,8 @@ npm install --save rdf-store-singlegraph
 
 ## History
 
-Taken from [zazukoians/trifid-ld](https://github.com/zazukoians/rdf-ext)
+Taken from [zazukoians/rdf-ext](https://github.com/zazukoians/rdf-ext)
 
 ## Licence
 
-Apache 2
+MIT
