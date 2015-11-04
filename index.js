@@ -1,43 +1,54 @@
-/* global rdf:true */
-'use strict';
+var util = require('util')
+var AbstractStore = require('rdf-store-abstract')
 
-function SingleGraphStore (rdf, singleGraph) {
-  this.graph = function (iri, callback) {
-    callback(singleGraph);
-  };
+function SingleGraphStore (options) {
+  options = options || {}
 
-  this.match = function (iri, subject, predicate, object, callback, limit) {
-    callback(singleGraph.match(subject, predicate, object, limit));
-  };
+  this.rdf = options.rdf || require('rdf-ext')
+  this.singleGraph = this.rdf.createGraph()
 
-  this.add = function (iri, graph, callback) {
-    callback(singleGraph = graph);
-  };
+  AbstractStore.call(this)
+}
 
-  this.merge = function (iri, graph, callback) {
-    singleGraph.addAll(graph);
+util.inherits(SingleGraphStore, AbstractStore)
 
-    callback(graph);
-  };
+SingleGraphStore.prototype.add = function (iri, graph, callback) {
+  var self = this
 
-  this.remove = function (iri, graph, callback) {
-    singleGraph = rdf.difference(singleGraph, graph);
+  callback = callback || function () {}
 
-    callback(true);
-  };
+  return new Promise(function (resolve) {
+    self.singleGraph = graph.clone()
 
-  this.removeMatches = function (iri, subject, predicate, object, callback) {
-    singleGraph.removeMatches(subject, predicate, object);
+    callback(null, graph)
+    resolve(graph)
+  })
+}
 
-    callback(true);
-  };
+SingleGraphStore.prototype.delete = function (iri, callback) {
+  var self = this
 
-  this.delete = function (iri, callback) {
-    singleGraph.removeMatches();
+  callback = callback || function () {}
 
-    callback(true);
-  };
-};
+  return new Promise(function (resolve) {
+    self.singleGraph = self.rdf.createGraph()
 
+    callback()
+    resolve()
+  })
+}
 
-module.exports = SingleGraphStore;
+SingleGraphStore.prototype.graph = function (iri, callback) {
+  var self = this
+
+  callback = callback || function () {}
+
+  return new Promise(function (resolve) {
+    var graph = self.singleGraph.clone()
+
+    callback(null, graph)
+    resolve(graph)
+  })
+}
+
+module.exports = SingleGraphStore
