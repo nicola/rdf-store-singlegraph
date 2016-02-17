@@ -1,4 +1,4 @@
-var util = require('util')
+var inherits = require('inherits')
 var AbstractStore = require('rdf-store-abstract')
 
 function SingleGraphStore (options) {
@@ -10,7 +10,7 @@ function SingleGraphStore (options) {
   AbstractStore.call(this)
 }
 
-util.inherits(SingleGraphStore, AbstractStore)
+inherits(SingleGraphStore, AbstractStore)
 
 SingleGraphStore.prototype.add = function (iri, graph, callback) {
   var self = this
